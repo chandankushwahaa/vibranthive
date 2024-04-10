@@ -1,0 +1,7 @@
+node_modules
+wrangler.toml
+.wrangler
+.env
+
+# Change them to your taste:
+package-lock.json
