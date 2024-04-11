@@ -44,13 +44,20 @@ npm install
     ```
     DATABASE_URL="PASTE DATABASE URL"
     ```
-    - inside `wrangler.toml` - Use [PRISMA](https://www.prisma.io/data-platform/accelerate)
+    #### Creating Connection Pool
+    - Move to [PRISMA](https://www.prisma.io/data-platform/accelerate) site create a new Project. Click Enable Accelerate.
+    - Under Database Connection String PASTE THE AIVEN DB URL created initially.
+    - Click ENABLE ACCELERATE
+    - Click Generate API KEY
+    - A URL is generated paste inside `wrangler.toml` file 
+    > It create a POOL url which we give to our backend not the orginal DB url. It help to connect to our database.
+
     ```
     name = "backend"
     compatibility_date = "2023-12-01"
 
     [vars]
-    DATABASE_URL="PASTE the PRISMA URL"
+    DATABASE_URL="PASTE the PRISMA URL (Connection Pool)"
     
     JWT_SECRET="mytoken"
     ```
@@ -75,7 +82,7 @@ npx prisma migrate dev --name init_schema
 npx prisma generate --no-engine
 ```
 
-Access Blogosphere in your browser at http://localhost:3000.
+Access in your browser at http://localhost:3000.
 
 
 ### To Deploy
