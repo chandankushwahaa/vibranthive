@@ -11,7 +11,7 @@ export const userRouter = new Hono<{
   }
 }>();
 
-
+// Sign UP
 userRouter.post('/signup', async(c) => {
     const prisma = new PrismaClient({
     datasourceUrl: c.env?.DATABASE_URL,
@@ -33,7 +33,7 @@ userRouter.post('/signup', async(c) => {
   })
 })
 
-
+// Sign IN
 userRouter.post('signin', async(c) => {
   const prisma = new PrismaClient({
     datasourceUrl: c.env?.DATABASE_URL,
@@ -57,4 +57,52 @@ userRouter.post('signin', async(c) => {
   return c.json({ 
     jwt: token 
   })
-})
+});
+
+// Get User
+userRouter.get('/getuser/:id', async(c) => {
+  const prisma = new PrismaClient({
+    datasourceUrl: c.env?.DATABASE_URL,
+  }).$extends(withAccelerate());
+
+  const authorid = c.req.param("id");
+  try {
+    const user = await prisma.user.findFirst({
+      where: {
+        id: authorid,
+      },
+    });
+    if (!user) {
+      c.status(411);
+      return c.json({
+        message: "User does not exist anymore",
+      });
+    }
+    c.status(200);
+    return c.json({
+      name: user.name,
+    });
+  } catch (error) {
+    c.status(500);
+    return c.json("Internal server error");
+  }
+});
+
+// Check User
+userRouter.get('/check', async(c) => {
+  const prisma = new PrismaClient({
+    datasourceUrl: c.env?.DATABASE_URL,
+  }).$extends(withAccelerate());
+
+  try {
+    const token = c.req.header('Authorization') || '';
+    const response = await verify(token, c.env.JWT_SECRET)
+    if (response) {
+      c.status(200)
+      return c.json({ response })
+    }
+  } catch (error) {
+    c.status(403)
+    return c.json({ message: 'UnAuthorized' })
+  }
+});

@@ -1,7 +1,7 @@
 import { Hono } from 'hono';
 import { cors } from 'hono/cors';
 import { userRouter } from './routes/user.route';
-import { verify } from 'hono/jwt';
+import { blogRouter } from './routes/blog.route';
 
 
 const app = new Hono<{
@@ -13,18 +13,7 @@ const app = new Hono<{
 
 app.use("/*", cors())
 app.route("/api/v1/user", userRouter)
+app.route("/api/v1/blog", blogRouter)
 
 
-app.use('/api/v1/blog/*', async(c, next) => {
-
-  const header = c.req.header('Authorization') || ''
-  const response = await verify(header, c.env.JWT_SECRET)
-  if(response.id){
-    next()
-  }else{
-    c.status(403)
-    return c.json({ message: 'Invalid token' })
-  }
-})
-
-export default app
+export default app;
