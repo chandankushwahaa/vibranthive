@@ -77,7 +77,7 @@ npm run dev
 npx prisma migrate dev --name init_schema
 ```
 - It will generate migration folder inside prisma.
-- And then Generate the prisma client 
+- And then Generate the prisma client  
 ```
 npx prisma generate --no-engine
 ```
