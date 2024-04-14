@@ -1,6 +1,13 @@
+## How to Deploy in Cloudflare
+
+Move to ``` cd backend```
+
 ```
-npm install
-npm run dev
+npx wrangler login
+```
+
+```
+npx wrangler whoami
 ```
 
 ```
