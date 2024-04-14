@@ -11,10 +11,10 @@ Vibranthive is a modern blogging application inspired by platforms like Medium, 
 
 
 ### Backend
-- **Cloudflare Workers**: A serverless execution environment that allows you to run JavaScript code at the edge of the Cloudflare network, providing scalable and efficient backend logic. [hono](https://hono.dev/top)
+- **Cloudflare Workers**: A serverless execution environment that allows you to run JavaScript code at the edge of the Cloudflare network, providing scalable and efficient backend logic. [Hono](https://hono.dev/top)
 - **TypeScript**: Leveraged for backend development as well, ensuring consistent type safety and code integrity across the entire application.
-- **Prisma**: A modern ORM (Object-Relational Mapping) tool that simplifies database access and manipulation, offering type-safe database queries and schema migrations.
-- **PostgreSQL**: A powerful open-source relational database management system, chosen for its reliability, scalability, and extensive feature set.
+- **Prisma**: A modern ORM (Object-Relational Mapping) tool that simplifies database access and manipulation, offering type-safe database queries and schema migrations. [Prisma](https://www.prisma.io/)
+- **PostgreSQL**: A powerful open-source relational database management system, chosen for its reliability, scalability, and extensive feature set. [Aiven](https://aiven.io/)
 
 
 ## Getting Started
@@ -23,7 +23,7 @@ Vibranthive is a modern blogging application inspired by platforms like Medium, 
 1. Clone the repository:
 
 ```bash
-git clone https://github.com/your-username/vibranthive.git
+git clone https://github.com/chandanck22/vibranthive.git
 ```
 2. Navigate to the project directory:
 ```bash
