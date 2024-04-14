@@ -2,7 +2,8 @@ import { Hono } from "hono";
 import { PrismaClient } from "@prisma/client/edge";
 import { withAccelerate } from "@prisma/extension-accelerate";
 import { sign, verify } from 'hono/jwt';
-
+import { signUpInput, signInInput } from "@nullhackers/vibranthive-common";
+import { hashpass, comparepass } from "../hashing/PasswordHash";
 
 export const userRouter = new Hono<{
   Bindings: {
@@ -18,19 +19,38 @@ userRouter.post('/signup', async(c) => {
   }).$extends(withAccelerate());
 
   const body = await c.req.json()
-  const user = await prisma.user.create({
-    data: {
-      email: body.email,
-      name: body.name,
-      password: body.password
+  const { success } = signUpInput.safeParse(body);
+  if(!success) {
+    c.status(411);
+    return c.json({ message: 'Invalid input' })
+  }
+
+  try {
+    const finduser = await prisma.user.findFirst({
+      where: {
+        email: body.email
+      },
+    });
+    if(finduser) {
+      c.status(411);
+      return c.json({ message: 'User already exists' })
     }
-  })
 
-  const token = await sign({ id: user.id }, c.env.JWT_SECRET)
+    const userPassword = await hashpass(body.password)
+    const user = await prisma.user.create({
+      data: {
+        email: body.email,
+        name: body.name,
+        password: userPassword
+      }
+    })
+  
+    const token = await sign({ id: user.id }, c.env.JWT_SECRET)
+    return c.json({ jwt: token })
 
-  return c.json({ 
-    jwt: token 
-  })
+  } catch (error) {
+    return c.status(403);
+  }
 })
 
 // Sign IN
@@ -40,23 +60,37 @@ userRouter.post('signin', async(c) => {
   }).$extends(withAccelerate());
 
   const body = await c.req.json()
-  const user = await prisma.user.findFirst({
-    where: {
-      email: body.email,
-      password: body.password
-    }
-  })
-
-  if (!user) {
-    c.status(403)
-    return  c.json({ message: 'Invalid credentials' })
+  const { success } = signInInput.safeParse(body);
+  if (!success) {
+    c.status(411)
+    return c.json({ message: 'Invalid input' })
   }
 
-  const token = await sign({ id: user.id }, c.env.JWT_SECRET)
+  try {
+    const user = await prisma.user.findFirst({
+      where: {
+        email: body.email
+      }
+    })
 
-  return c.json({ 
-    jwt: token 
-  })
+    if (!user) {
+      c.status(411)
+      return c.json({ message: 'User does not exist' })
+    }
+    
+    const checkUser = await comparepass(body.password, user.password);
+    if(!checkUser){
+      c.status(403)
+      return c.json({ message: 'Invalid password' })
+    }
+
+    const { password, ...rest } = user;
+    const token = await sign({ id: user.id }, c.env.JWT_SECRET)
+    return c.json({ jwt: token, user: rest })
+    
+  } catch (error) {
+    return c.status(403);
+  }
 });
 
 // Get User

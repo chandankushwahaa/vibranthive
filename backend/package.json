@@ -4,8 +4,13 @@
     "deploy": "wrangler deploy --minify src/index.ts"
   },
   "dependencies": {
+    "@nullhackers/vibranthive-common": "^1.0.0",
     "@prisma/client": "^5.12.1",
     "@prisma/extension-accelerate": "^1.0.0",
+    "@types/bcrypt": "^5.0.2",
+    "@types/bcryptjs": "^2.4.6",
+    "bcrypt": "^5.1.1",
+    "bcryptjs": "^2.4.3",
     "hono": "^4.2.2",
     "prisma": "^5.12.1"
   },
