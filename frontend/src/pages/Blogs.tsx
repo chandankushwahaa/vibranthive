@@ -1,35 +1,37 @@
-import { Appbar } from "../components/Appbar";
-import { BlogCard } from "../components/BlogCard";
+import { Appbar } from "../components/Appbar"
+import { BlogCard } from "../components/BlogCard"
+import { BlogSkeleton } from "../components/BlogSkeleton";
+import { useBlogs } from "../hooks";
 
 export const Blogs = () => {
+    const { loading, blogs } = useBlogs();
 
-  return <div>
-    < Appbar />
+    if (loading) {
+        return <div>
+            <Appbar /> 
+            <div  className="flex justify-center">
+                <div>
+                    <BlogSkeleton />
+                </div>
+            </div>
+        </div>
+    }
 
-    <div className="flex justify-center">
-      <div className="max-w-xl">
-        <BlogCard
-          id={2}
-          authorName={"Chandan Kushwaha"}
-          title={"CHadna  galgotias unieraactiva"}
-          content={"Lorem ipsum dolor sit amet consectetur adipisicing elit. Ut repudiandae dignissimos deserunt. Corrupti explicabo, dolore ipsa, mollitia fugit tempora esse, necessitatibus aperiam itaque laudantium dolorem at excepturi nihil incidunt molestias."}
-          publishedDate={"2nd Feb 2024"}
-        />
-        <BlogCard
-          id={2}
-          authorName={"Chandan Kushwaha"}
-          title={"CHadna  galgotias unieraactiva"}
-          content={"Lorem ipsum dolor sit amet consectetur adipisicing elit. Ut repudiandae dignissimos deserunt. Corrupti explicabo, dolore ipsa, mollitia fugit tempora esse, necessitatibus aperiam itaque laudantium dolorem at excepturi nihil incidunt molestias."}
-          publishedDate={"2nd Feb 2024"}
-        />
-        <BlogCard
-          id={2}
-          authorName={"Chandan Kushwaha"}
-          title={"CHadna  galgotias unieraactiva"}
-          content={"Lorem ipsum dolor sit amet consectetur adipisicing elit. Ut repudiandae dignissimos deserunt. Corrupti explicabo, dolore ipsa, mollitia fugit tempora esse, necessitatibus aperiam itaque laudantium dolorem at excepturi nihil incidunt molestias."}
-          publishedDate={"2nd Feb 2024"}
-        />
-      </div>
+    return <div>
+        <Appbar />
+        <div  className="flex justify-center">
+            <div>
+                {blogs.map(blog => <BlogCard
+                    key={blog.id}
+                    id={blog.id}
+                    // authorName={blog.author.name || "Anonymous"}
+                    authorName={blog.autherName || "Anonymous"}
+                    title={blog.title}
+                    content={blog.content}
+                    publishedDate={"2nd Feb 2024"}
+                />)}
+            </div>
+        </div>
     </div>
-  </div>
-};
+}
+
