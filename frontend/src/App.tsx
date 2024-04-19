@@ -3,7 +3,7 @@ import {Signup} from './pages/Signup';
 import {Signin} from './pages/Signin';
 import Home from './pages/Home';
 import { Blogs } from "./pages/Blogs";
-import Blog from "./pages/Blog";
+import { Blog } from "./pages/Blog";
 
 function App() {
     return (
@@ -21,4 +21,4 @@ function App() {
   )
 }
 
-export default App
+export default App;
